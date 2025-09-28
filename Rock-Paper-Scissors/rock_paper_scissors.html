@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock-Paper-Scissors-Lizard-Spock ⚡</title>
+    <style>
+        /* ---- DARK MODE & GLOBAL ---- */
+        body {
+            background-color: #121212;
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin: 20px 0;
+            color: #00ffe0;
+            text-shadow: 0 0 10px #00ffe0;
+        }
+
+        .choices {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+            gap: 15px;
+        }
+
+        .choices button {
+            font-size: 2rem;
+            padding: 15px 25px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            background-color: #222;
+            color: #fff;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .choices button:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 15px #00ffe0;
+        }
+
+        .display {
+            font-size: 5rem;
+            margin: 20px 0;
+        }
+
+        .result {
+            font-size: 1.5rem;
+            margin: 15px 0;
+            color: #ffea00;
+        }
+
+        .scoreboard, .history {
+            margin: 20px auto;
+            max-width: 500px;
+            text-align: left;
+            background-color: #1e1e1e;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .scoreboard h2, .history h2 {
+            color: #ff4081;
+        }
+
+        .history-list {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .history-list p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Rock-Paper-Scissors-Lizard-Spock ⚡</h1>
+
+    <div>
+        <div class="display">
+            <span id="player-choice">❔</span> vs <span id="computer-choice">❔</span>
+        </div>
+        <div class="result" id="result-text">Make your move!</div>
+    </div>
+
+    <div class="choices">
+        <button onclick="play('Rock')">✊ Rock</button>
+        <button onclick="play('Paper')">🖐️ Paper</button>
+        <button onclick="play('Scissors')">✌️ Scissors</button>
+        <button onclick="play('Lizard')">🦎 Lizard</button>
+        <button onclick="play('Spock')">🖖 Spock</button>
+    </div>
+
+    <div class="scoreboard">
+        <h2>Scoreboard</h2>
+        <p>You: <span id="user-score">0</span> | Computer: <span id="comp-score">0</span> | Draws: <span id="draws">0</span></p>
+    </div>
+
+    <div class="history">
+        <h2>History</h2>
+        <div class="history-list" id="history"></div>
+    </div>
+
+    <script>
+        const choices = ['Rock', 'Paper', 'Scissors', 'Lizard', 'Spock'];
+        const emojis = {
+            'Rock': '✊',
+            'Paper': '🖐️',
+            'Scissors': '✌️',
+            'Lizard': '🦎',
+            'Spock': '🖖'
+        };
+
+        let userScore = 0, compScore = 0, draws = 0;
+
+        function play(userChoice) {
+            const compChoice = choices[Math.floor(Math.random() * choices.length)];
+
+            document.getElementById('player-choice').textContent = emojis[userChoice];
+            document.getElementById('computer-choice').textContent = emojis[compChoice];
+
+            const resultText = getResult(userChoice, compChoice);
+            document.getElementById('result-text').textContent = resultText;
+
+            // update scoreboard
+            document.getElementById('user-score').textContent = userScore;
+            document.getElementById('comp-score').textContent = compScore;
+            document.getElementById('draws').textContent = draws;
+
+            // update history
+            const historyDiv = document.getElementById('history');
+            const round = document.createElement('p');
+            round.textContent = `You ${emojis[userChoice]} vs Computer ${emojis[compChoice]} → ${resultText}`;
+            historyDiv.prepend(round); // latest on top
+        }
+
+        function getResult(user, comp) {
+            if (user === comp) {
+                draws++;
+                return "Draw 🤝";
+            }
+
+            // Winning combinations
+            const wins = {
+                'Rock': ['Scissors', 'Lizard'],
+                'Paper': ['Rock', 'Spock'],
+                'Scissors': ['Paper', 'Lizard'],
+                'Lizard': ['Spock', 'Paper'],
+                'Spock': ['Scissors', 'Rock']
+            };
+
+            if (wins[user].includes(comp)) {
+                userScore++;
+                return "You Win! 🎉";
+            } else {
+                compScore++;
+                return "Computer Wins! 🤖";
+            }
+        }
+    </script>
+
+</body>
+</html>
